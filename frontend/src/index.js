@@ -10,6 +10,7 @@ function Tours() {
   const [filtering, setFiltering] = useState({
     minPrice: '',
     maxPrice: '',
+    location: '',
   });
 
   const fetchData = async () => {
@@ -39,7 +40,13 @@ function Tours() {
   }
 
   return (
-    <div class="tours">
+    <div className="tours">
+
+      <header className=''>
+        <h1>Tours</h1>
+        <button>Import</button>
+      </header>
+
       <form onSubmit={''}>
         <label>
           Min Price:
@@ -59,10 +66,20 @@ function Tours() {
             onChange={changeFiltering}
           />
         </label>
+        <label for="location-select">Choose a location:</label>
+        <select
+          name="location"
+          id="location-select"
+          value={filtering.location}
+          onChange={changeFiltering}
+        >
+          <option value="">Location</option>
+          <option value="Prague">Prague</option>
+          <option value="New York">New York</option>
+        </select>
         <input type="submit" value="Filter" />
       </form>
 
-      <h1>Tours</h1>
       {tours.map((tour) => (
         <Tour obj={tour} />
       ))}
@@ -72,7 +89,7 @@ function Tours() {
 
 function Tour({ obj }) {
   return (
-    <div class="tour">
+    <div className="tour">
       <p>{obj.name}</p>
       <p>{obj.address.city}</p>
       <br />
