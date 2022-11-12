@@ -1,41 +1,6 @@
-import React, { useState } from 'react';
-
 import Tour from './Tour';
 
-function Tours() {
-  const [tours, setTours] = useState([]);
-  const [filtering, setFiltering] = useState({
-    minPrice: '',
-    maxPrice: '',
-    location: '',
-  });
-
-  const fetchData = async () => {
-    // fetch('/tours', {
-    //   method: 'GET',
-    //   body: JSON.stringify(filtering),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    // })
-
-    const response = await fetch('https://jsonplaceholder.typicode.com/users');
-    const data = await response.json();
-    return setTours(data);
-  };
-
-  React.useEffect(() => {
-    fetchData();
-  });
-
-  function changeFiltering(event) {
-    const value = event.target.value;
-    setFiltering({
-      ...filtering,
-      [event.target.name]: value,
-    });
-  }
-
+function Tours({ tours, filtering, changeFiltering }) {
   return (
     <div className="tours">
       <header className="">
