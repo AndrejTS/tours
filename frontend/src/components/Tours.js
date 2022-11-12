@@ -1,14 +1,14 @@
 import Tour from './Tour';
 
-function Tours({ tours, filtering, changeFiltering }) {
+function Tours({ tours, filtering, changeFiltering, filterTours, onDelete }) {
+  const onSubmit = (event) => {
+    event.preventDefault();
+    filterTours();
+  };
+
   return (
     <div className="tours">
-      <header className="">
-        <h1>Tours</h1>
-        <button>Import</button>
-      </header>
-
-      <form onSubmit={''}>
+      <form onSubmit={onSubmit}>
         <label>
           Min Price:
           <input
@@ -41,8 +41,8 @@ function Tours({ tours, filtering, changeFiltering }) {
         <input type="submit" value="Filter" />
       </form>
 
-      {tours.map((tour, index) => (
-        <Tour obj={tour} key={index} />
+      {tours.map((tour) => (
+        <Tour obj={tour} key={tour.id} onDelete={onDelete} />
       ))}
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 
+import Header from './components/Header';
 import Tours from './components/Tours';
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   function changeFiltering(event) {
     const value = event.target.value;
@@ -37,13 +38,28 @@ function App() {
     });
   }
 
+  function filterTours() {
+    console.log('Filtering...')
+  }
+
+  const deleteTour = (id) => {
+    setTours(tours.filter((tour) => tour.id != id));
+  };
+
   return (
     <>
-      <Tours
-        tours={tours}
-        filtering={filtering}
-        changeFiltering={changeFiltering}
-      />
+      <Header />
+      {tours.length > 0 ? (
+        <Tours
+          tours={tours}
+          filtering={filtering}
+          changeFiltering={changeFiltering}
+          filterTours={filterTours}
+          onDelete={deleteTour}
+        />
+      ) : (
+        'No tours to show'
+      )}
     </>
   );
 }
