@@ -76,8 +76,8 @@ function Tours() {
         <input type="submit" value="Filter" />
       </form>
 
-      {tours.map((tour) => (
-        <Tour obj={tour} />
+      {tours.map((tour, index) => (
+        <Tour obj={tour} key={index} />
       ))}
     </div>
   );
