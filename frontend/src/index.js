@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-
+import './index.css';
 import Header from './components/Header';
 import Tours from './components/Tours';
 
@@ -39,7 +39,7 @@ function App() {
   }
 
   function filterTours() {
-    console.log('Filtering...')
+    console.log('Filtering...');
   }
 
   const deleteTour = (id) => {
@@ -55,7 +55,7 @@ function App() {
           filtering={filtering}
           changeFiltering={changeFiltering}
           filterTours={filterTours}
-          onDelete={deleteTour}
+          deleteTour={deleteTour}
         />
       ) : (
         'No tours to show'

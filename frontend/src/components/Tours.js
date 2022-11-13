@@ -1,6 +1,6 @@
 import Tour from './Tour';
 
-function Tours({ tours, filtering, changeFiltering, filterTours, onDelete }) {
+function Tours({ tours, filtering, changeFiltering, filterTours, deleteTour }) {
   const onSubmit = (event) => {
     event.preventDefault();
     filterTours();
@@ -42,7 +42,7 @@ function Tours({ tours, filtering, changeFiltering, filterTours, onDelete }) {
       </form>
 
       {tours.map((tour) => (
-        <Tour obj={tour} key={tour.id} onDelete={onDelete} />
+        <Tour obj={tour} key={tour.id} deleteTour={deleteTour} />
       ))}
     </div>
   );
