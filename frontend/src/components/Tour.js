@@ -1,18 +1,34 @@
 import { useState } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { FaTimes } from 'react-icons/fa';
 
-function Tour({ obj, deleteTour }) {
+function Tour({ tour, deleteTour, editTour }) {
+  const [name, setName] = useState(tour.name);
+  const [city, setCity] = useState(tour.address.city);
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
 
+  const updatedTour = {
+    ...tour,
+    name: name,
+    address: { ...tour.address, city: city },
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    editTour(tour.id, updatedTour);
+    setEditModalIsOpen(false);
+  };
+
   return (
     <div className="tour">
-      <p>{obj.name}</p>
+      <p>{tour.name}</p>
       <FaTimes
         style={{ color: 'red', cursor: 'pointer' }}
         onClick={() => setDeleteModalIsOpen(true)}
       />
+
+      <span onClick={() => setEditModalIsOpen(true)}>Edit</span>
 
       <Modal
         show={deleteModalIsOpen}
@@ -21,9 +37,9 @@ function Tour({ obj, deleteTour }) {
         <Modal.Header closeButton>
           <Modal.Title>Delete Tour</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Delete tour {obj.id}?</Modal.Body>
+        <Modal.Body>Delete tour {tour.id}?</Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => deleteTour(obj.id)}>Delete</Button>
+          <Button onClick={() => deleteTour(tour.id)}>Delete</Button>
           <Button
             variant="secondary"
             onClick={() => setDeleteModalIsOpen(false)}
@@ -33,16 +49,40 @@ function Tour({ obj, deleteTour }) {
         </Modal.Footer>
       </Modal>
 
-      <p>{obj.address.city}</p>
+      <p>{tour.address.city}</p>
 
       <Modal show={editModalIsOpen} onHide={() => setEditModalIsOpen(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Tour</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{obj}</Modal.Body>
+        <Modal.Body>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group>
+              <Form.Control
+                type="text"
+                placeholder="Name"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Control
+                type="text"
+                placeholder="Name"
+                name="name"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Button type="submit">Save</Button>
+          </Form>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setEditModalIsOpen(false)}>
-            Close Button
+            Close
           </Button>
         </Modal.Footer>
       </Modal>

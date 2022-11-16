@@ -44,21 +44,30 @@ function App() {
     setTours(tours.filter((tour) => tour.id != id));
   };
 
+  const editTour = (id, updatedTour) => {
+    setTours(tours.map((tour) => (tour.id === id ? updatedTour : tour)));
+  };
+
   return (
-    <>
-      <Header />
-      {tours.length > 0 ? (
-        <Tours
-          tours={tours}
-          filtering={filtering}
-          changeFiltering={changeFiltering}
-          filterTours={filterTours}
-          deleteTour={deleteTour}
-        />
-      ) : (
-        'No tours to show'
-      )}
-    </>
+    <div className="container-xl">
+      <div className="table-responsive">
+        <div className="table-wrapper">
+          <Header />
+          {tours.length > 0 ? (
+            <Tours
+              tours={tours}
+              filtering={filtering}
+              changeFiltering={changeFiltering}
+              filterTours={filterTours}
+              deleteTour={deleteTour}
+              editTour={editTour}
+            />
+          ) : (
+            'No tours to show'
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
