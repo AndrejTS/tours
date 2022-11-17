@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import Tours from './components/Tours';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './components/Home';
 
 function App() {
   const [tours, setTours] = useState([]);
@@ -49,12 +49,13 @@ function App() {
   };
 
   return (
-    <div className="container-xl">
-      <div className="table-responsive">
-        <div className="table-wrapper">
-          <Header />
-          {tours.length > 0 ? (
-            <Tours
+    <Router>
+      <Routes>
+        <Route path="/import" element={<></>} />
+        <Route
+          path="/"
+          element={
+            <Home
               tours={tours}
               filtering={filtering}
               changeFiltering={changeFiltering}
@@ -62,12 +63,10 @@ function App() {
               deleteTour={deleteTour}
               editTour={editTour}
             />
-          ) : (
-            'No tours to show'
-          )}
-        </div>
-      </div>
-    </div>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 

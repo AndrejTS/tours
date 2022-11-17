@@ -1,8 +1,11 @@
+import { Link } from 'react-router-dom';
+
+
 function Header() {
   return (
-    <header className="">
+    <header>
       <h1>Tours</h1>
-      <button>Import</button>
+      <Link to='/import'><button>Import</button></Link>
     </header>
   );
 }
