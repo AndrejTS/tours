@@ -2,15 +2,15 @@ import express, { json, urlencoded } from 'express';
 import cors from 'cors';
 import db from './models/index.js';
 
-PORT = process.env.PORT || '8000';
+const PORT = process.env.PORT || '8000';
+
+const app = express();
 
 var corsOptions = {
   origin: 'http://localhost:3000',
 };
 
 app.use(cors(corsOptions));
-
-const app = express();
 
 app.use(json());
 app.use(urlencoded({ extended: false }));

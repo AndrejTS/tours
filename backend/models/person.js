@@ -1,9 +1,10 @@
-const { DataTypes } = require('sequelize');
+import DataTypes from 'sequelize'
 
 export default (sequelize) => {
   const Person = sequelize.define('person', {
     personID: {
       type: DataTypes.STRING,
+      unique: true,
     },
     lastName: {
       allowNull: false,

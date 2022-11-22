@@ -6,6 +6,13 @@ import {
   HOST,
   dialect as _dialect,
 } from '../config/db.config.js';
+import tour from './tour.js';
+import country from './country.js';
+import destination from './destination.js';
+import person from './person.js';
+import tariff from './tariff.js';
+import insurance from './insurances.js';
+import currency from './currency.js';
 
 const sequelize = new Sequelize(DB, USER, PASSWORD, {
   host: HOST,
@@ -17,14 +24,13 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.tour = require('./tour.js')(sequelize);
-db.country = require('./country.js')(sequelize);
-db.destination = require('./destination.js')(sequelize);
-db.person = require('./person.js')(sequelize);
-db.tariff = require('./tariff.js')(sequelize);
-db.insurance = require('./insurance.js')(sequelize);
-db.currency = require('./currency.js')(sequelize);
-
+db.tour = tour(sequelize);
+db.country = country(sequelize);
+db.destination = destination(sequelize);
+db.person = person(sequelize);
+db.tariff = tariff(sequelize);
+db.insurance = insurance(sequelize);
+db.currency = currency(sequelize);
 
 db.tour.belongsToMany(db.person, {
   through: 'tour_person',
@@ -69,7 +75,7 @@ db.currency.hasMany(db.insurance, {
   foreignKey: {
     allowNull: false,
   },
-  as: 'insurancies',
+  as: 'insurances',
 });
 db.insurance.belongsTo(db.currency, {
   as: 'currency',
