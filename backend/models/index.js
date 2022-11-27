@@ -41,18 +41,19 @@ db.person.belongsToMany(db.tour, {
   as: 'tours',
 });
 
-db.country.hasMany(db.tour, {
+db.destination.hasMany(db.tour, {
   foreignKey: {
     allowNull: false,
   },
   as: 'tours',
 });
-db.tour.belongsTo(db.country, {
-  as: 'country',
+db.tour.belongsTo(db.destination, {
+  as: 'destination',
 });
 
 db.country.hasMany(db.destination, {
   foreignKey: {
+    name: 'countryShortcut',
     allowNull: false,
   },
   as: 'destinations',
@@ -81,14 +82,13 @@ db.insurance.belongsTo(db.currency, {
   as: 'currency',
 });
 
-db.tariff.hasMany(db.person, {
-  foreignKey: {
-    allowNull: false,
-  },
+db.tariff.belongsToMany(db.person, {
+  through: 'tariff_person',
   as: 'persons',
 });
-db.person.belongsTo(db.tariff, {
-  as: 'tariff',
+db.person.belongsToMany(db.tariff, {
+  through: 'tariff_person',
+  as: 'tariffs',
 });
 
 export default db;

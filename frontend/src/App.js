@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
+import Import from './components/Import';
 
 function App() {
   const [tours, setTours] = useState([]);
@@ -51,7 +52,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/import" element={<></>} />
+        <Route path="/import" element={<Import/>} />
         <Route
           path="/"
           element={
