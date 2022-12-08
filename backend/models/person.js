@@ -2,7 +2,7 @@ import DataTypes from 'sequelize'
 
 export default (sequelize) => {
   const Person = sequelize.define('person', {
-    personID: {
+    personId: {
       type: DataTypes.STRING,
       unique: true,
     },
@@ -23,7 +23,7 @@ export default (sequelize) => {
     },
     gender: {
       allowNull: false,
-      type: DataTypes.CHAR(1),
+      type: DataTypes.STRING,
     },
     email: {
       type: DataTypes.STRING,

@@ -20,7 +20,7 @@ router.post('/import', upload.single('upfile'), (req, res) => {
     try {
       await db.sequelize.transaction(async (t) => {
         for (const tour of parsed.root.tour) {
-          const countryShortcut = tour.trip[0].country[0];
+          const countryShortcut = tour.country[0];
           await db.country.findOrCreate({
             where: {
               shortcut: countryShortcut,
@@ -30,7 +30,7 @@ router.post('/import', upload.single('upfile'), (req, res) => {
 
           const [destination] = await db.destination.findOrCreate({
             where: {
-              destination: tour.trip[0].destination[0],
+              destination: tour.destination[0],
               countryShortcut: countryShortcut,
             },
             transaction: t,
@@ -53,10 +53,10 @@ router.post('/import', upload.single('upfile'), (req, res) => {
 
           await db.tour.upsert(
             {
-              voucher: tour.trip[0].voucher[0],
-              issueDate: tour.trip[0].issueDate[0],
-              departureDate: tour.trip[0].departureDate[0],
-              returnDate: tour.trip[0].returnDate[0],
+              voucher: tour.voucher[0],
+              issueDate: tour.issueDate[0],
+              departureDate: tour.departureDate[0],
+              returnDate: tour.returnDate[0],
               destinationId: destination.id,
               insuranceId: insurance.id,
             },
@@ -64,25 +64,52 @@ router.post('/import', upload.single('upfile'), (req, res) => {
           );
 
           for (const person of tour.persons) {
-            const birthDate = person.birthDate[0];
-            const gender = person.gender[0];
-            const idNum = person.idnum[0];
+            let birthDate = person.birthDate ? person.birthDate[0] : null;
+            let gender = person.gender ? person.gender[0] : null;
+            const idNum = person.idnum ? person.idnum[0] : null;
 
             if (!idNum && (!gender || !birthDate)) {
+              const errMsg =
+                'Each person must have either an ID number or date of birth and gender.';
               res.status(400).json({
-                error:
-                  'Each person must have either an ID number or date of birth and gender.',
+                error: errMsg,
               });
-              return;
+              throw errMsg;
             }
 
             if (idNum && (gender || birthDate)) {
               if (!personCheck(birthDate, gender, idNum)) {
+                const errMsg =
+                  "ID number doesn't match birth date and/or gender";
                 res.status(400).json({
-                  error: "ID number doesn't match birth date and/or gender",
+                  error: errMsg,
                 });
-                return;
+                throw errMsg;
               }
+            }
+
+            const idNumYear = idNum.slice(0, 2);
+            let idNumMonth = idNum.slice(2, 4);
+            const idNumDay = idNum.slice(4, 6);
+            if (idNumMonth > 50) {
+              idNumMonth -= 50;
+              var idNumGender = 'F';
+            } else {
+              var idNumGender = 'M';
+            }
+            //  Od roku 2004 (zákonem č. 53/2004 Sb.) je navíc zavedena možnost v případě,
+            //  že jsou v některý den již vyčerpána všechna platná čtyřčíslí,
+            //  použít alternativní rodné číslo, kde se k číslu měsíce narození přičte
+            //  ještě číslo 20 (u žen v tom případě tedy celkem 70).
+            if (idNumMonth > 20) {
+              idNumMonth -= 20;
+            }
+
+            if (!birthDate) {
+              birthDate = `${idNumYear}-${idNumMonth}-${idNumDay}`;
+            }
+            if (!gender) {
+              gender = idNumGender;
             }
 
             const tariffs = [];
@@ -101,14 +128,14 @@ router.post('/import', upload.single('upfile'), (req, res) => {
                 personID: person.personID[0],
                 lastName: person.lastName[0],
                 firstName: person.firstName[0],
-                idnum: idNum,
-                birthDate: birthDate,
-                gender: gender,
-                email: person.email[0],
-                phone: person.phone[0],
-                address: person.address[0],
-                riskFactor: person.riskFactor[0],
-                remark: person.remark[0],
+                idnum: idNum ? idNum : null,
+                birthDate: birthDate ? birthDate : null,
+                gender: gender ? gender : null,
+                email: person.email ? person.email[0] : null,
+                phone: person.phone ? person.phone[0] : null,
+                address: person.address ? person.address[0] : null,
+                riskFactor: person.riskFactor ? person.riskFactor[0] : null,
+                remark: person.remark ? person.remark[0] : null,
               },
               transaction: t,
             });

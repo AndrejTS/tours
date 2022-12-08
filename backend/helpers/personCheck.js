@@ -1,5 +1,5 @@
 function personCheck(birthDate, gender, idNum) {
-  if (!birthDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
+  if (birthDate && !birthDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
     return false;
   }
   if (!idNum.match(/^\d{10}$/)) {
@@ -31,13 +31,13 @@ function personCheck(birthDate, gender, idNum) {
   }
 
   if (birthDate) {
-    if (birthDate.slice(0, 4) !== idNumYear) {
+    if (birthDate.slice(2, 4) !== idNumYear) {
       return false;
     }
     if (birthDate.slice(5, 7) !== idNumMonth) {
       return false;
     }
-    if (birthDate.slice(8, 9) !== idNumDay) {
+    if (birthDate.slice(8, 10) !== idNumDay) {
       return false;
     }
   }
